@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}ScamText — Басты бет{% endblock %}
+{% block content %}
+<div class="hero">
+<span class="badge">Машиналық оқыту · TF-IDF + Logistic Regression</span>
+<h1>SMS пен хабарламаларды <span>Spam / Ham</span> деп талда</h1>
+<p class="lead">ScamText қазақ, орыс, ағылшын және қытай тіліндегі мәтіндік хабарламаларды машиналық оқыту моделі арқылы жіктейді. Тіркелу керек емес, хабарламаларыңыз сақталмайды.</p>
+<a class="btn" href="/analyzer">Хабарламаны тексеру</a>
+<a class="btn ghost" href="/performance">Модель нәтижелері</a>
+</div>
+<section><h2>Қолдау көрсетілетін тілдер</h2><div class="grid g3">
+<div class="card"><h3>Қазақша</h3><p class="muted">Қазақ тіліне тән әріптер арқылы анықталады.</p></div>
+<div class="card"><h3>Русский</h3><p class="muted">Орыс тіліндегі хабарламалар.</p></div>
+<div class="card"><h3>English</h3><p class="muted">Ағылшын тіліндегі хабарламалар.</p></div>
+<div class="card"><h3>中文</h3><p class="muted">Қытай тіліндегі хабарламалар (жеңілдетілген иероглифтер).</p></div></div></section>
+<section><div class="notice warn"><b>Қауіпсіздік туралы:</b> Spam деп анықталуы хабарламаның міндетті түрде алаяқтық екенін білдірмейді. Платформа тек мәтінді талдайды. Күмәнді сілтемелерді ашпаңыз, банк деректерін, кодтарды хабарламамен бермеңіз.</div></section>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}{% block title %}ScamText — AI зертханасы{% endblock %}
+{% block content %}
+{% set b=m.get('bayes') %}{% set n=m.get('neural_net') %}{% set sf=m.get('safety') %}
+<section><h2>AI зертханасы</h2>
+<p class="muted">QAIRU AI Fundamentals Final жобасы: бір хабарлама AI Fundamentals силлабусының үш түрлі аптасындағы әдіспен талданады. Үш модель де бірдей деректе, бірдей Train/Test бөлінісінде оқытылған.</p>
+{% if not ready %}<div class="notice warn">Қосымша модельдер әлі оқытылмаған. <code>python train_model.py</code> командасын іске қосыңыз.</div>{% endif %}
+<div class="card static scroll"><table>
+<tr><th>Апта</th><th>Тақырып</th><th>Іске асыру</th><th>Файл</th></tr>
+<tr><td>6</td><td>Probability; Bayesian inference</td><td>Naive Bayes: Bayes ережесі, prior мен likelihood нөлден жазылған</td><td><code>bayes_nb.py</code></td></tr>
+<tr><td>8</td><td>Classical ML: жіктеу</td><td>TF-IDF + Logistic Regression, метрикалар, салыстыру</td><td><code>train_model.py</code></td></tr>
+<tr><td>9</td><td>Perceptrons; Neural Networks</td><td>Көпқабатты нейрондық желі: backpropagation, Adam нөлден жазылған; perceptron мен XOR</td><td><code>neural_net.py</code></td></tr>
+<tr><td>10</td><td>AI Safety (қосымша)</td><td>Хабарламаны өзгертіп алдау (evasion) шабуылдарына төзімділікті өлшеу</td><td><code>safety.py</code></td></tr>
+</table></div></section>
+
+<section><h2>1. Үш модельмен талдау</h2>
+<p class="muted">Хабарлама мәтінін өзгертіп, Naive Bayes үшін алдын ала ықтималдықты (prior) слайдермен таңдаңыз.</p>
+<div class="card static">
+<textarea id="lab-msg" data-max="{{ max_chars }}" maxlength="{{ max_chars + 500 }}" placeholder="Хабарлама мәтінін осында қойыңыз..." style="min-height:110px"></textarea>
+<div class="examples muted" style="margin-top:8px">Мысал:
+<button type="button" data-text="Сізге 200 000 теңге несие бекітілді! Ақшаны алу үшін сілтемеге өтіп, карта деректерін енгізіңіз.">қазақша Spam</button>
+<button type="button" data-text="Дорогая, я купил билеты на субботу, поезд отправляется в 7:40 с первой платформы.">русский Ham</button>
+<button type="button" data-text="Final notice: your streaming subscription failed. Update billing details here to avoid cancellation.">English Spam</button></div>
+<div class="row">
+<label class="muted" for="prior">Prior P(Spam): <b id="prior-val"></b></label>
+<input type="range" id="prior" min="1" max="99" value="{{ ((b.train_prior_spam if b else 0.5)*100)|round|int }}" aria-label="Prior P(Spam)">
+<button class="btn" id="lab-run" type="button" {% if not ready %}disabled{% endif %}>Талдау</button>
+<span class="counter" id="lab-cnt"></span></div>
+<div class="err" id="lab-err"></div>
+<div id="lab-res" class="lab-out">
+<div class="lab-grid">
+<div class="card static"><div class="muted">8-апта: Logistic Regression</div><div id="lr-v" class="verdict"></div>
+<div class="muted" style="margin-top:8px">P(Spam) = <b id="lr-p"></b></div><div class="bar"><i id="lr-bar" style="width:0"></i></div><div id="lr-w" style="margin-top:8px"></div></div>
+<div class="card static"><div class="muted">6-апта: Naive Bayes (Bayes ережесі)</div><div id="nb-v" class="verdict"></div>
+<div class="formula" id="nb-f"></div><div class="muted" id="nb-h" style="font-size:.85rem"></div><div id="nb-w" style="margin-top:6px"></div></div>
+<div class="card static"><div class="muted">9-апта: Нейрондық желі</div><div id="nn-v" class="verdict"></div>
+<div class="muted" style="margin-top:8px">P(Spam) = <b id="nn-p"></b></div><div class="bar"><i id="nn-bar" style="width:0"></i></div><div id="nn-w" style="margin-top:8px"></div></div>
+</div>
+<p class="muted" style="font-size:.85rem;margin-top:12px">Chip: қызыл — Spam жағына, жасыл — Ham жағына итеретін дәлел (log likelihood ratio). Naive Bayes сөздерді тәуелсіз деп есептейді, сондықтан ықтималдығы 0 немесе 1-ге тым жақын шығуы мүмкін (шектеу).</p>
+</div></div></section>
+
+{% if b and n %}
+<section><h2>2. Үш модельдің нәтижесі</h2>
+<div class="card static scroll"><table>
+<tr><th>Апта / модель</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th>{% for lang in m.per_language %}<th>{{ lang }}</th>{% endfor %}</tr>
+{% for name,o,pl in [('8 · Logistic Regression', m.overall, m.per_language), ('6 · Naive Bayes (нөлден)', b.overall, b.per_language), ('9 · Нейрондық желі (нөлден)', n.overall, n.per_language)] %}
+<tr><td>{{ name }}</td><td>{{ '%.1f'|format(o.accuracy*100) }}%</td><td>{{ '%.1f'|format(o.precision*100) }}%</td><td>{{ '%.1f'|format(o.recall*100) }}%</td><td>{{ '%.1f'|format(o.f1*100) }}%</td>
+{% for lang in m.per_language %}<td>{{ '%.1f'|format(pl[lang].accuracy*100) }}%</td>{% endfor %}</tr>{% endfor %}
+</table>
+<p class="muted" style="font-size:.88rem">Test жиыны: {{ m.overall.support }} хабарлама (шағын әрі синтетикалық), сондықтан модельдер арасындағы 1–3 пайыздық айырма сенімді артықшылық емес.</p></div>
+<div class="grid g2" style="margin-top:16px">
+<div class="card static"><h3>Нейрондық желі</h3><ul class="clean muted">
+<li>Құрылымы: {{ n.architecture }}</li><li>Параметр саны: <b>{{ n.n_parameters }}</b></li>
+<li>Learning rate {{ n.learning_rate }}, L2 {{ n.l2 }}, epoch {{ n.epochs }}</li>
+<li>Жасырын нейрон санын Train ішіндегі validation бөлігінде таңдадық (Test қолданылмады):
+{% for s in n.model_selection_on_validation %}{{ s.hidden }} нейрон → val loss {{ s.val_loss }}{% if not loop.last %}; {% endif %}{% endfor %}</li></ul>
+<div class="muted" style="margin-top:8px">Оқыту loss қисығы</div>
+<svg class="curve" id="nn-curve" viewBox="0 0 300 100" preserveAspectRatio="none"></svg>
+{% if n.loss_curve %}<script type="application/json" id="nn-curve-data">{{ n.loss_curve|tojson }}</script>{% endif %}</div>
+<div class="card static"><h3>Naive Bayes</h3><ul class="clean muted">
+<li>Сөздік көлемі: <b>{{ b.vocab_size }}</b> токен</li><li>Оқыту деректеріндегі P(Spam): <b>{{ '%.1f'|format(b.train_prior_spam*100) }}%</b></li>
+<li>Формула: posterior odds = prior odds × Π P(сөз | Spam) / P(сөз | Ham)</li><li>Laplace smoothing α = 1 (көрмеген сөз нөлге апармайды)</li></ul></div></div></section>
+{% endif %}
+
+<section><h2>3. Perceptron және XOR</h2>
+<p class="muted">Бір қабатты perceptron XOR есебін шеше алмайды (сызықпен бөлінбейді). Жасырын қабаты бар желі шешеді. Параметрлерді өзгертіп көріңіз: 1 жасырын нейронмен желі де қателеседі.</p>
+<div class="card static"><div class="row" style="margin-top:0">
+<label class="muted">Жасырын нейрон <input type="number" id="x-h" value="4" min="1" max="16"></label>
+<label class="muted">Learning rate <input type="number" id="x-lr" value="0.05" min="0.001" max="1" step="0.01"></label>
+<label class="muted">Epoch <input type="number" id="x-ep" value="1000" min="10" max="5000" step="10"></label>
+<label class="muted">Seed <input type="number" id="x-seed" value="1" min="0" max="1000"></label>
+<button class="btn" id="x-run" type="button">Оқыту</button></div>
+<div class="err" id="x-err"></div>
+<div id="x-res" class="lab-out"><div class="grid g2">
+<div><h3>Perceptron</h3><div class="muted">Accuracy: <b id="x-pa"></b></div><div class="muted" id="x-pp"></div></div>
+<div><h3>Нейрондық желі</h3><div class="muted">Accuracy: <b id="x-na"></b></div><div class="muted" id="x-np"></div>
+<svg class="curve" id="x-curve" viewBox="0 0 300 100" preserveAspectRatio="none"></svg></div></div></div></div></section>
+
+<section><h2>4. AI Safety: алдау шабуылдары</h2>
+<p class="muted">Алаяқтар жазылуын өзгертіп сүзгіден жалтарады. Жоғарыдағы өріске жазылған хабарламаға шабуыл қолданып, үш модельдің шешімі қалай өзгеретінін көріңіз.</p>
+<div class="card static"><div class="row" style="margin-top:0">
+<select id="s-attack" style="width:auto" aria-label="Шабуыл түрі"><option value="homoglyph">Homoglyph (кирилл → латын ұқсастары)</option><option value="spacing">Нүкте/бос орын қосу</option><option value="leetspeak">Leetspeak</option></select>
+<button class="btn" id="s-run" type="button" {% if not ready %}disabled{% endif %}>Шабуыл қолдану</button></div>
+<div class="err" id="s-err"></div>
+<div id="s-res" class="lab-out"><div class="muted">Өзгертілген мәтін: <b id="s-text"></b></div>
+<div class="scroll"><table style="margin-top:8px"><tr><th>Модель</th><th>P(Spam) бұрын</th><th>P(Spam) кейін</th><th>Шешім</th></tr><tbody id="s-body"></tbody></table></div></div>
+{% if sf %}<h3 style="margin-top:22px">Test жиынындағы өлшем</h3>
+<p class="muted" style="font-size:.88rem">Шабуыл нақты өзгерткен Spam хабарламалардағы Recall (бұрын → кейін). Тест Spam саны: {{ sf.n_spam_test }}.</p>
+<div class="scroll"><table><tr><th>Шабуыл</th><th>Мәтін саны</th><th>Logistic Regression</th><th>Naive Bayes</th><th>Neural Network</th></tr>
+{% for key,a in sf.attacks.items() %}<tr><td>{{ a.label }}</td><td>{{ a.n_changed }}</td>
+{% for mn in ['Logistic Regression','Naive Bayes','Neural Network'] %}{% set r=a.models.get(mn) %}<td>{% if r %}{{ '%.0f'|format(r.recall_clean*100) }}% → <b class="{{ 'good' if r.recall_attacked>=0.9 else 'mid' if r.recall_attacked>=0.6 else 'bad' }}">{{ '%.0f'|format(r.recall_attacked*100) }}%</b>{% endif %}</td>{% endfor %}</tr>{% endfor %}</table></div>
+<p class="muted" style="font-size:.85rem;margin-top:10px">Homoglyph және нүкте қосу шабуылдары Recall-ды қатты түсіреді: модельдер таңбалар тізбегін оқиды, адам сияқты мағынаны емес. Leetspeak-те Recall төмендемейді: цифрлар мәтін өңдеуде «сан» белгісіне айналып, деректегі Spam үлгісіне ұқсайды. Бұл қорғаныс емес, деректің ерекшелігі. Шешімі: кіріс мәтінін қалыпқа келтіру (Unicode нормализациясы) және шынайы шабуылдармен қайта оқыту (жоба кеңейтілмеген).</p>{% endif %}
+</div></section>
+{% endblock %}

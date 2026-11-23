@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %}ScamText — Модель нәтижелері{% endblock %}
+{% block content %}
+{% set o=m.overall %}{% set d=m.dataset %}{% set cm=m.confusion_matrix.matrix %}
+<section><h2>Модель нәтижелері</h2>
+<div class="notice warn">Барлық көрсеткіш <code>train_model.py</code> іске қосылғанда нақты есептелген. Жалпы тест жиыны: <b>{{ o.support }}</b> хабарлама. Әр тілдің тест үлгісі шағын (төмендегі кестені қараңыз), ал мәтіндердің бәрі синтетикалық, сондықтан нәтижелер шынайы жағдайға қарағанда оптимистік болуы мүмкін.</div></section>
+<section><div class="grid g3">
+{% for k,t in [('accuracy','Accuracy'),('precision','Precision'),('recall','Recall'),('f1','F1-score')] %}
+<div class="card static"><div class="muted">{{ t }}</div><div style="font-size:2rem;font-weight:700">{{ '%.1f'|format(o[k]*100) }}%</div></div>{% endfor %}
+</div></section>
+<section><div class="grid g2">
+<div class="card static"><h3>Confusion Matrix</h3><p class="muted">Жолдар — нақты, бағандар — болжам.</p>
+<div class="cm"><span></span><b>Ham</b><b>Spam</b><b>Ham</b><div class="c good">{{ cm[0][0] }}</div><div class="c bad">{{ cm[0][1] }}</div><b>Spam</b><div class="c bad">{{ cm[1][0] }}</div><div class="c good">{{ cm[1][1] }}</div></div></div>
+<div class="card static"><h3>Деректер</h3><ul class="clean muted">
+<li>Файлдағы жол саны: <b>{{ d.total_rows_in_file }}</b></li>
+<li>Қайталанбайтын мәтін (оқытуға қолданылған): <b>{{ d.unique_texts_used }}</b></li>
+<li>Train / Test: <b>{{ d.train_size }} / {{ d.test_size }}</b></li>
+<li>5-fold CV Accuracy: <b>{{ '%.1f'|format(m.cross_validation_5fold_accuracy.mean*100) }}%</b></li>
+<li>Алгоритм: {{ d.algorithm }}</li></ul></div></div></section>
+<section><h2>Тіл бойынша нәтиже</h2><div class="card static scroll"><table>
+<tr><th>Тіл</th><th>Бірегей мәтін</th><th>Test саны</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
+{% for lang,v in m.per_language.items() %}<tr><td>{{ lang }}</td><td>{{ d.per_language_unique[lang] }}</td><td>{{ v.support }}</td>
+<td class="{{ 'good' if v.accuracy>=0.9 else 'mid' if v.accuracy>=0.75 else 'bad' }}">{{ '%.1f'|format(v.accuracy*100) }}%</td>
+<td>{{ '%.1f'|format(v.precision*100) }}%</td><td>{{ '%.1f'|format(v.recall*100) }}%</td><td>{{ '%.1f'|format(v.f1*100) }}%</td></tr>{% endfor %}
+</table><p class="muted" style="font-size:.88rem">Ең аз тілде тесттің тек {{ m.per_language.values()|map(attribute='support')|min }} хабарламасы бар, сондықтан бір қате пайызды қатты өзгертеді. Нашар тіл нәтижесі жасырылмайды.</p></div></section>
+{% if m.model_comparison %}<section><h2>Әдістерді салыстыру</h2><div class="card static scroll"><table>
+<tr><th>Әдіс</th><th>Test Accuracy</th><th>F1</th><th>5-fold CV</th><th>Log loss</th><th>Қазақша / Орысша / Ағылшынша{% if m.dataset.per_language_unique.Chinese %} / Қытайша{% endif %}</th></tr>
+{% for r in m.model_comparison %}<tr><td>{{ r.model }}</td><td>{{ '%.1f'|format(r.accuracy*100) }}%</td><td>{{ '%.1f'|format(r.f1*100) }}%</td><td>{{ '%.1f'|format(r.cv_accuracy_mean*100) }}%</td><td>{{ r.log_loss if r.log_loss is defined else '—' }}</td>
+<td>{{ '%.0f'|format(r.per_language_accuracy.Kazakh*100) }}% / {{ '%.0f'|format(r.per_language_accuracy.Russian*100) }}% / {{ '%.0f'|format(r.per_language_accuracy.English*100) }}%{% if r.per_language_accuracy.Chinese is defined %} / {{ '%.0f'|format(r.per_language_accuracy.Chinese*100) }}%{% endif %}</td></tr>{% endfor %}
+</table><p class="muted" style="font-size:.88rem">Барлық әдіс бірдей Train/Test бөлінісінде және бірдей мәтін өңдеумен бағаланған. Әдіс жоба талабына сай алдын ала таңдалған (TF-IDF + Logistic Regression), кестеге қарап ауыстырылмаған. Naive Bayes пен Linear SVM бұл деректе сәл жоғары көрсеткіш берді (тестте 3–4 мысалға ғана айырма, 176-дан), сондықтан бұл шағын синтетикалық деректе сенімді артықшылық деп санауға болмайды. Log loss — ықтималдық сапасы (кіші — жақсы); Linear SVM ықтималдық бермейді.</p></div></section>{% endif %}
+<section><h2>Деректердің сапасы туралы</h2><div class="card static"><ul class="clean muted">
+<li>Барлығы {{ d.total_rows_in_file }} жолдың {{ m.data_checks.removed_duplicates }}-і қайталану болып шықты. Тазалаудан кейін {{ d.unique_texts_used }} бірегей мәтін қалды.</li>
+<li>Бастапқы файлда Ham хабарламалардың соңында <code>(ID-n)</code>, Spam хабарламалардың соңында <code>[Код: n]</code> жұрнағы бар еді, бұл белгіні тікелей көрсетеді. Оны алып тастамағанда Accuracy <b>{{ '%.0f'|format(m.leakage_demo.accuracy_with_label_leakage*100) }}%</b> шығады, бірақ бұл жарамсыз нәтиже.</li>
+<li>Синтетикалық мәтіндер Gemini және Claude арқылы жасалған; олар шынайы пайдаланушылардан алынған дерек емес (толығырақ «Жоба туралы» бетінде).</li></ul></div></section>
+<section><h2>Модельдің шектеулері</h2><div class="card static"><ul class="clean muted">{% for l in m.limitations %}<li>{{ l }}</li>{% endfor %}</ul></div></section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}ScamText — Тексеру{% endblock %}
+{% block content %}
+<section><h2>Хабарламаны талдау</h2><p class="muted">Мәтінді енгізіңіз, модель оны Spam немесе Ham деп жіктейді.</p>
+<div class="card static">
+<textarea id="msg" data-max="{{ max_chars }}" maxlength="{{ max_chars + 500 }}" placeholder="Хабарлама мәтінін осында қойыңыз..."></textarea>
+<div class="row">
+<select id="lang" style="width:auto" aria-label="Тіл"><option value="auto">Тілді автоматты анықтау</option><option value="Kazakh">Қазақша</option><option value="Russian">Русский</option><option value="English">English</option><option value="Chinese">中文</option></select>
+<button class="btn" id="check" type="button">Тексеру</button>
+<span class="counter" id="cnt"></span></div>
+<div class="err" id="err"></div>
+<div id="result">
+<div class="grid g2" style="margin-top:6px">
+<div><div class="muted">Нәтиже</div><div id="verdict" class="verdict"></div></div>
+<div><div class="muted">Анықталған тіл</div><div id="rlang" style="font-size:1.3rem;font-weight:600"></div>
+<div class="muted" style="margin-top:10px">Модельдің сенімділігі: <b id="rconf"></b></div><div class="bar"><i id="rbar" style="width:0"></i></div></div></div>
+<p class="muted" id="rhint" style="margin-top:18px"></p><div id="rwords"></div>
+<p class="muted" style="font-size:.85rem;margin-top:14px">Сенімділік шағын деректегі модельдің ықтималдығы, ол кепілдік емес. Түсіндірме модельдің ішкі есебінен алынады.</p>
+<button class="btn ghost" id="again" type="button" style="margin-top:10px">Қайта тексеру</button>
+</div></div></section>
+{% endblock %}

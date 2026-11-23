@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="kk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}ScamText{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head><body>
+<nav><div class="container nav-in">
+<a class="logo" href="/"><svg viewBox="0 0 32 32" fill="none"><path d="M16 2 4 7v8c0 7 5 12.5 12 15 7-2.5 12-8 12-15V7L16 2Z" fill="#8b5cf6"/><path d="M10 16l4 4 8-8" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Scam<b>Text</b></span></a>
+<div class="links">
+<a href="/" class="{{ 'active' if request.path=='/' }}">Басты бет</a>
+<a href="/analyzer" class="{{ 'active' if request.path=='/analyzer' }}">Тексеру</a>
+<a href="/lab" class="{{ 'active' if request.path=='/lab' }}">AI зертханасы</a>
+<a href="/how-it-works" class="{{ 'active' if request.path=='/how-it-works' }}">Қалай жұмыс істейді</a>
+<a href="/performance" class="{{ 'active' if request.path=='/performance' }}">Модель нәтижелері</a>
+<a href="/about" class="{{ 'active' if request.path=='/about' }}">Жоба туралы</a>
+</div></div></nav>
+<main class="container">{% block content %}{% endblock %}</main>
+<footer><div class="container">ScamText — оқу жобасы. Нәтиже тек мәтінді талдауға негізделген және алаяқтықтың дәлелі емес. Енгізілген хабарламалар сақталмайды.</div></footer>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lab.js') }}"></script>
+</body></html>

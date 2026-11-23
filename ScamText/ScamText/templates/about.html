@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}ScamText — Жоба туралы{% endblock %}
+{% block content %}
+<section><h2>Жоба туралы</h2><p class="muted">ScamText — қазақ, орыс және ағылшын тіліндегі хабарламаларды Spam немесе Ham деп жіктейтін оқу жобасы. Мақсаты — мәтінді талдау арқылы қажетсіз хабарламаларды анықтайтын қарапайым, жергілікті жұмыс істейтін құрал жасау.</p></section>
+<section><div class="grid g2">
+<div class="card static"><h3>Технологиялар</h3><p>{% for t in ['Python','Flask','HTML/CSS/JS','Pandas','Scikit-learn','TF-IDF','Logistic Regression','Matplotlib'] %}<span class="chip">{{ t }}</span>{% endfor %}</p></div>
+<div class="card static"><h3>Мүмкіндіктер</h3><ul class="clean muted"><li>Spam / Ham жіктеу</li><li>Тілді автоматты анықтау</li><li>Модель сенімділігі</li><li>Нәтижеге әсер еткен сөздер</li><li>Тіркелусіз, сақтаусыз жұмыс</li></ul></div></div></section>
+<section><h2>Дереккөздер мен лицензиялар</h2><div class="card static scroll"><table>
+<tr><th>Тіл</th><th>Дереккөз</th><th>Мәртебесі</th></tr>
+{% for o in m.dataset.extra_sources %}<tr><td>{{ o.language }}</td><td>{{ o.source }}</td><td class="good">{% if o.origin=='real' %}Шынайы ашық дереккөз, лицензия: {{ o.license }}{% else %}Синтетикалық дерек, үшінші тарап дерегі жоқ — қолдануға болады{% endif %}. Қолданылған бірегей мәтін: {{ o.unique_texts_used }}</td></tr>{% endfor %}
+</table><p class="muted" style="font-size:.88rem">Синтетикалық мәтіндер шынайы пайдаланушылардан алынған дерек емес. Олар жасанды интеллект арқылы жасалған: Gemini (xlsx және қазақша/орысша docx файлдары, жоба авторының мәлімдемесі бойынша) және Claude (орысша мен ағылшынша толықтыру).</p></div></section>
+<section><h2>Шектеулер</h2><div class="card static"><ul class="clean muted">{% for l in ["Бірегей мәтін саны тілдер бойынша: қазақша " ~ m.dataset.per_language_unique.Kazakh ~ ", орысша " ~ m.dataset.per_language_unique.Russian ~ ", ағылшынша " ~ m.dataset.per_language_unique.English ~ (", қытайша " ~ m.dataset.per_language_unique.Chinese if m.dataset.per_language_unique.Chinese else "") ~ ". Модель шынайы SMS-ке нашар жалпыланады.","Spam нәтижесі хабарламаның алаяқтық екенін дәлелдемейді.","Тілді анықтау әріп жазуына негізделген қарапайым әдіс.","Транслитпен жазылған немесе аралас тілді мәтін дұрыс танылмауы мүмкін."] %}<li>{{ l }}</li>{% endfor %}</ul></div></section>
+{% endblock %}

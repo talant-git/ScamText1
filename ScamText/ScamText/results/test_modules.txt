@@ -1,0 +1,57 @@
+
+== 6-апта: Naive Bayes (нөлден жазылған) sklearn нәтижесімен салыстыру
+OK   | Posterior sklearn MultinomialNB-мен сәйкес | ең үлкен айырма = 4.99e-05, 302 мәтін
+OK   | Оқыту деректеріндегі жапсырмалар бірдей болжанады
+OK   | Prior өссе, posterior өседі | 0.8578 ≤ 0.9819 ≤ 0.998
+OK   | prior=0,5 болғанда posterior = sigmoid(дәлел)
+OK   | Танылмаған сөздер ескерілмейді
+OK   | Қате prior=0 қабылданбайды
+OK   | Қате prior=1 қабылданбайды
+OK   | Қате prior=-0.2 қабылданбайды
+OK   | Қате prior=1.5 қабылданбайды
+OK   | Қытай мәтіні биграмға бөлінеді
+
+== 9-апта: нейрондық желі (нөлден жазылған)
+OK   | Backpropagation градиенті сандық градиентпен сәйкес | ең үлкен салыстырмалы қате = 4.01e-06
+OK   | Оқыту loss-ты азайтады | 0.6974 → 0.2885
+OK   | Нейрондық желі XOR-ды шешеді (4 жасырын нейрон)
+OK   | Perceptron XOR-ды шеше алмайды (сызықпен бөлінбейді) | accuracy = 0.5
+OK   | Perceptron AND-ты үйренеді (сызықпен бөлінеді)
+
+== 10-апта: алдау шабуылдарының функциялары
+OK   | Homoglyph кирилл «а» әрпін латын «a» әрпіне ауыстырады
+OK   | Homoglyph ағылшын мәтінін өзгертпейді
+OK   | Spacing ұзын сөзге нүкте қосады
+OK   | Leetspeak әріпті цифрға ауыстырады
+
+== API: қосымша endpoint-тер және қате енгізу
+OK   | /api/compare үш модельді қайтарады
+OK   | Spam мысалын үш модель де Spam деп таниды
+OK   | API-да prior өзгерсе posterior өзгереді | 0.0496 < 0.9496
+OK   | /api/compare: бос мәтін
+OK   | /api/compare: мәтін жоқ
+OK   | /api/compare: 1001 таңба
+OK   | /api/compare: prior = 0
+OK   | /api/compare: prior мәтін
+OK   | /api/compare: prior = True
+OK   | /api/compare: дұрыс prior
+OK   | /api/compare: JSON емес сұраныс
+OK   | /api/xor: әдепкі параметр
+OK   | /api/xor: hidden=0
+OK   | /api/xor: hidden=1,5
+OK   | /api/xor: epochs=10**9
+OK   | /api/xor: lr мәтін
+OK   | /api/xor: lr=0
+OK   | /api/xor: seed теріс
+OK   | /api/xor: hidden=1 (желі қателеседі, бірақ жұмыс істейді)
+OK   | /api/safety: leetspeak
+OK   | /api/safety: homoglyph
+OK   | /api/safety: spacing
+OK   | /api/safety: белгісіз шабуыл
+OK   | /api/safety: бос мәтін
+OK   | <script> мәтіні қауіпсіз өңделеді (JSON ретінде)
+OK   | /lab беті ашылады
+OK   | Бұрынғы /api/analyze өзгермеген
+
+== Қорытынды
+Сәтсіз тест: 0

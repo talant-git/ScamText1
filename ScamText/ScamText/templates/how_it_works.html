@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}ScamText — Қалай жұмыс істейді{% endblock %}
+{% block content %}
+<section><h2>Жүйенің жұмыс принципі</h2><p class="muted">Хабарлама бес қадамнан өтеді. Оқыту мен тексеруде бірдей өңдеу қолданылады.</p>
+<div class="flow">
+<div class="step"><div class="num">1</div><div class="card body"><h3>Мәтін енгізіледі</h3><p class="muted">Қолданушы хабарламаны өріске жазады. Бос және тым ұзын мәтін қабылданбайды.</p></div></div><div class="line"></div>
+<div class="step"><div class="num">2</div><div class="card body"><h3>Алдын ала өңдеу</h3><p class="muted">Кіші әріпке түрлендіру, сілтеме мен сандарды белгіге ауыстыру, артық бос орындарды алу.</p></div></div><div class="line"></div>
+<div class="step"><div class="num">3</div><div class="card body"><h3>TF-IDF векторы</h3><p class="muted">Мәтін таңба n-граммдары (2–5) бойынша сандық векторға айналады.</p></div></div><div class="line"></div>
+<div class="step"><div class="num">4</div><div class="card body"><h3>Logistic Regression</h3><p class="muted">Модель Spam ықтималдығын есептейді. 0,5-тен жоғары болса Spam, әйтпесе Ham.</p></div></div><div class="line"></div>
+<div class="step"><div class="num">5</div><div class="card body"><h3>Нәтиже көрсетіледі</h3><p class="muted">Жапсырма, тіл, сенімділік және нәтижеге ең көп әсер еткен сөздер.</p></div></div>
+</div></section>
+{% endblock %}

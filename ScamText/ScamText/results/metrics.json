@@ -1,0 +1,527 @@
+{
+  "data_checks": {
+    "xlsx_rows": 3000,
+    "null_values": 0,
+    "exact_duplicate_messages_in_xlsx": 0,
+    "rows_from_user_docx_data": 60,
+    "rows_from_kazakh_gemini_300": 302,
+    "rows_from_claude_ru_en": 483,
+    "rows_from_claude_zh": 248,
+    "raw_rows": 4093,
+    "texts_with_conflicting_labels_removed": 0,
+    "unique_texts_after_cleaning": 1124,
+    "removed_duplicates": 2969
+  },
+  "leakage_demo": {
+    "description": "Accuracy if raw xlsx messages (with (ID-n)/[Код: n] suffixes that perfectly encode the label) are used. NOT a valid result.",
+    "accuracy_with_label_leakage": 1.0
+  },
+  "dataset": {
+    "total_rows_in_file": 4093,
+    "extra_sources": [
+      {
+        "source": "Claude арқылы жасалған синтетикалық мәтін (Anthropic Claude, оқу жобасын толықтыру үшін)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "English",
+        "unique_texts_used": 243
+      },
+      {
+        "source": "Claude арқылы жасалған синтетикалық мәтін (Anthropic Claude, оқу жобасын толықтыру үшін)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "Russian",
+        "unique_texts_used": 240
+      },
+      {
+        "source": "Claude арқылы жасалған синтетикалық мәтін (Anthropic Claude, қытай тілін қосу үшін; жеңілдетілген иероглифтер)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "Chinese",
+        "unique_texts_used": 248
+      },
+      {
+        "source": "Gemini арқылы жасалған синтетикалық мәтін (300_sapa_habarlar_v3.docx)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "Kazakh",
+        "unique_texts_used": 243
+      },
+      {
+        "source": "Gemini арқылы жасалған синтетикалық мәтін (kazakh_messages_10000.docx)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "Kazakh",
+        "unique_texts_used": 30
+      },
+      {
+        "source": "Gemini арқылы жасалған синтетикалық мәтін (messages.xlsx)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "English",
+        "unique_texts_used": 30
+      },
+      {
+        "source": "Gemini арқылы жасалған синтетикалық мәтін (messages.xlsx)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "Kazakh",
+        "unique_texts_used": 30
+      },
+      {
+        "source": "Gemini арқылы жасалған синтетикалық мәтін (messages.xlsx)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "Russian",
+        "unique_texts_used": 30
+      },
+      {
+        "source": "Gemini арқылы жасалған синтетикалық мәтін (russian_messages_10000.docx)",
+        "license": "Үшінші тарап лицензиясы жоқ (синтетикалық)",
+        "origin": "synthetic",
+        "language": "Russian",
+        "unique_texts_used": 30
+      }
+    ],
+    "unique_texts_used": 1124,
+    "train_size": 898,
+    "test_size": 226,
+    "split": "80/20 stratified by language and class, split done AFTER deduplication (no text appears in both sets)",
+    "per_language_unique": {
+      "Kazakh": 303,
+      "Russian": 300,
+      "English": 273,
+      "Chinese": 248
+    },
+    "per_language_class": {
+      "English": {
+        "Ham (Normal)": 155,
+        "Spam": 118
+      },
+      "Kazakh": {
+        "Ham (Normal)": 187,
+        "Spam": 116
+      },
+      "Russian": {
+        "Ham (Normal)": 171,
+        "Spam": 129
+      },
+      "Chinese": {
+        "Ham (Normal)": 140,
+        "Spam": 108
+      }
+    },
+    "sources": {
+      "Chinese": "Claude арқылы жасалған синтетикалық мәтін (Anthropic Claude, қытай тілін қосу үшін; жеңілдетілген иероглифтер)",
+      "English": "Gemini арқылы жасалған синтетикалық мәтін (messages.xlsx)",
+      "Kazakh": "Gemini арқылы жасалған синтетикалық мәтін (messages.xlsx)",
+      "Russian": "Gemini арқылы жасалған синтетикалық мәтін (messages.xlsx)"
+    },
+    "algorithm": "TF-IDF (char_wb n-grams 2-5, sublinear tf) + Logistic Regression (C=10)"
+  },
+  "overall": {
+    "accuracy": 0.9425,
+    "precision": 0.9271,
+    "recall": 0.9368,
+    "f1": 0.9319,
+    "support": 226
+  },
+  "confusion_matrix": {
+    "labels": [
+      "Ham",
+      "Spam"
+    ],
+    "matrix": [
+      [
+        124,
+        7
+      ],
+      [
+        6,
+        89
+      ]
+    ]
+  },
+  "per_language": {
+    "Chinese": {
+      "accuracy": 0.88,
+      "precision": 0.8636,
+      "recall": 0.8636,
+      "f1": 0.8636,
+      "support": 50
+    },
+    "English": {
+      "accuracy": 0.9636,
+      "precision": 0.9583,
+      "recall": 0.9583,
+      "f1": 0.9583,
+      "support": 55
+    },
+    "Kazakh": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 61
+    },
+    "Russian": {
+      "accuracy": 0.9167,
+      "precision": 0.8889,
+      "recall": 0.9231,
+      "f1": 0.9057,
+      "support": 60
+    }
+  },
+  "latin_script_test": {
+    "accuracy": 0.9752,
+    "precision": 0.96,
+    "recall": 0.9796,
+    "f1": 0.9697,
+    "support": 121
+  },
+  "cross_validation_5fold_accuracy": {
+    "mean": 0.9333,
+    "folds": [
+      0.9333,
+      0.9111,
+      0.9467,
+      0.9422,
+      0.933
+    ]
+  },
+  "model_comparison": [
+    {
+      "model": "TF-IDF (таңба n-грам 2-5) + Logistic Regression [таңдалған]",
+      "accuracy": 0.9425,
+      "precision": 0.9271,
+      "recall": 0.9368,
+      "f1": 0.9319,
+      "support": 226,
+      "log_loss": 0.2659,
+      "brier": 0.0652,
+      "per_language_accuracy": {
+        "Chinese": 0.88,
+        "English": 0.9636,
+        "Kazakh": 1.0,
+        "Russian": 0.9167
+      },
+      "cv_accuracy_mean": 0.9333
+    },
+    {
+      "model": "TF-IDF (сөз 1-2) + Logistic Regression",
+      "accuracy": 0.8894,
+      "precision": 0.8977,
+      "recall": 0.8316,
+      "f1": 0.8634,
+      "support": 226,
+      "log_loss": 0.3815,
+      "brier": 0.0958,
+      "per_language_accuracy": {
+        "Chinese": 0.68,
+        "English": 0.9273,
+        "Kazakh": 0.9836,
+        "Russian": 0.9333
+      },
+      "cv_accuracy_mean": 0.8648
+    },
+    {
+      "model": "TF-IDF (таңба n-грам 2-5) + Naive Bayes",
+      "accuracy": 0.9646,
+      "precision": 0.9223,
+      "recall": 1.0,
+      "f1": 0.9596,
+      "support": 226,
+      "log_loss": 0.1594,
+      "brier": 0.0362,
+      "per_language_accuracy": {
+        "Chinese": 0.94,
+        "English": 0.9273,
+        "Kazakh": 1.0,
+        "Russian": 0.9833
+      },
+      "cv_accuracy_mean": 0.9475
+    },
+    {
+      "model": "TF-IDF (таңба n-грам 2-5) + Linear SVM",
+      "accuracy": 0.9469,
+      "precision": 0.9192,
+      "recall": 0.9579,
+      "f1": 0.9381,
+      "support": 226,
+      "per_language_accuracy": {
+        "Chinese": 0.92,
+        "English": 0.9273,
+        "Kazakh": 0.9836,
+        "Russian": 0.95
+      },
+      "cv_accuracy_mean": 0.944
+    }
+  ],
+  "limitations": [
+    "Деректердің синтетикалық бөлігі (1124 бірегей мәтін) жасанды интеллект (Gemini, Claude) арқылы жасалған; бұл шынайы SMS емес, сондықтан нақты хабарламаларда нәтиже төмен болуы мүмкін.",
+    "Деректер тілдер бойынша тең емес: Kazakh — 303, Russian — 300, English — 273, Chinese — 248. Тілдер арасындағы нәтижелерді тікелей салыстыруға болмайды.",
+    "Транслит (латын әрпімен жазылған қазақша/орысша) қолдауы тек өз оқыту мәтіндерінің автоматты транслитерациясына негізделген, шынайы транслит корпусы жоқ.",
+    "Spam деп анықталуы хабарламаның алаяқтық екенін дәлелдемейді; платформа тек мәтінді талдайды."
+  ],
+  "bayes": {
+    "week": 6,
+    "algorithm": "Naive Bayes (Bayes ережесі, нөлден жазылған), Laplace α=1",
+    "vocab_size": 8309,
+    "train_prior_spam": 0.4125,
+    "overall": {
+      "accuracy": 0.9602,
+      "precision": 0.9135,
+      "recall": 1.0,
+      "f1": 0.9548,
+      "support": 226
+    },
+    "per_language": {
+      "Chinese": {
+        "accuracy": 0.9,
+        "precision": 0.8148,
+        "recall": 1.0,
+        "f1": 0.898,
+        "support": 50
+      },
+      "English": {
+        "accuracy": 0.9818,
+        "precision": 0.96,
+        "recall": 1.0,
+        "f1": 0.9796,
+        "support": 55
+      },
+      "Kazakh": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 61
+      },
+      "Russian": {
+        "accuracy": 0.95,
+        "precision": 0.8966,
+        "recall": 1.0,
+        "f1": 0.9455,
+        "support": 60
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Ham",
+        "Spam"
+      ],
+      "matrix": [
+        [
+          122,
+          9
+        ],
+        [
+          0,
+          95
+        ]
+      ]
+    }
+  },
+  "neural_net": {
+    "week": 9,
+    "algorithm": "Көпқабатты нейрондық желі (backpropagation + Adam, нөлден жазылған)",
+    "architecture": "66410 TF-IDF кіріс → 32 жасырын нейрон (tanh) → 1 шығыс (sigmoid)",
+    "n_parameters": 2125185,
+    "learning_rate": 0.02,
+    "l2": 0.0001,
+    "epochs": 300,
+    "hidden": 32,
+    "model_selection_on_validation": [
+      {
+        "hidden": 8,
+        "best_epoch": 300,
+        "val_loss": 0.1437
+      },
+      {
+        "hidden": 16,
+        "best_epoch": 297,
+        "val_loss": 0.1336
+      },
+      {
+        "hidden": 32,
+        "best_epoch": 300,
+        "val_loss": 0.1272
+      }
+    ],
+    "overall": {
+      "accuracy": 0.9425,
+      "precision": 0.91,
+      "recall": 0.9579,
+      "f1": 0.9333,
+      "support": 226
+    },
+    "per_language": {
+      "Chinese": {
+        "accuracy": 0.92,
+        "precision": 0.875,
+        "recall": 0.9545,
+        "f1": 0.913,
+        "support": 50
+      },
+      "English": {
+        "accuracy": 0.9273,
+        "precision": 0.8846,
+        "recall": 0.9583,
+        "f1": 0.92,
+        "support": 55
+      },
+      "Kazakh": {
+        "accuracy": 0.9836,
+        "precision": 1.0,
+        "recall": 0.9565,
+        "f1": 0.9778,
+        "support": 61
+      },
+      "Russian": {
+        "accuracy": 0.9333,
+        "precision": 0.8929,
+        "recall": 0.9615,
+        "f1": 0.9259,
+        "support": 60
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Ham",
+        "Spam"
+      ],
+      "matrix": [
+        [
+          122,
+          9
+        ],
+        [
+          4,
+          91
+        ]
+      ]
+    },
+    "loss_curve": [
+      1.7572,
+      0.4954,
+      0.2762,
+      0.2069,
+      0.1552,
+      0.1161,
+      0.0908,
+      0.0751,
+      0.0646,
+      0.0573,
+      0.052,
+      0.048,
+      0.045,
+      0.0425,
+      0.0405,
+      0.0388,
+      0.0373,
+      0.0361,
+      0.0349,
+      0.0339,
+      0.0329,
+      0.0321,
+      0.0313,
+      0.0305,
+      0.0299,
+      0.0292,
+      0.0288,
+      0.0282,
+      0.0279,
+      0.0272,
+      0.0267,
+      0.0263,
+      0.0259,
+      0.0255,
+      0.0251,
+      0.0248,
+      0.0244,
+      0.0241,
+      0.0239,
+      0.0236,
+      0.0233,
+      0.0231,
+      0.0228,
+      0.0229,
+      0.0225,
+      0.0294,
+      0.0301,
+      0.031,
+      0.0261,
+      0.0252,
+      0.0238,
+      0.0227,
+      0.0219,
+      0.0214,
+      0.0211,
+      0.0208,
+      0.0206,
+      0.0204,
+      0.0203,
+      0.0202
+    ]
+  },
+  "safety": {
+    "description": "Spam recall on test Spam texts that the attack changed: before vs after the attack.",
+    "n_spam_test": 95,
+    "attacks": {
+      "leetspeak": {
+        "label": "Leetspeak (a→4, e→3, o→0 ...)",
+        "n_changed": 35,
+        "models": {
+          "Logistic Regression": {
+            "recall_clean": 0.9714,
+            "recall_attacked": 1.0
+          },
+          "Naive Bayes": {
+            "recall_clean": 1.0,
+            "recall_attacked": 1.0
+          },
+          "Neural Network": {
+            "recall_clean": 0.9714,
+            "recall_attacked": 1.0
+          }
+        }
+      },
+      "homoglyph": {
+        "label": "Homoglyph (кирилл әріптері → латын ұқсастары)",
+        "n_changed": 49,
+        "models": {
+          "Logistic Regression": {
+            "recall_clean": 0.9592,
+            "recall_attacked": 0.6531
+          },
+          "Naive Bayes": {
+            "recall_clean": 1.0,
+            "recall_attacked": 0.6122
+          },
+          "Neural Network": {
+            "recall_clean": 0.9592,
+            "recall_attacked": 0.6735
+          }
+        }
+      },
+      "spacing": {
+        "label": "Нүкте/бос орын қосу (p.r.i.z.e)",
+        "n_changed": 95,
+        "models": {
+          "Logistic Regression": {
+            "recall_clean": 0.9368,
+            "recall_attacked": 0.4105
+          },
+          "Naive Bayes": {
+            "recall_clean": 1.0,
+            "recall_attacked": 0.2211
+          },
+          "Neural Network": {
+            "recall_clean": 0.9579,
+            "recall_attacked": 0.4316
+          }
+        }
+      }
+    }
+  }
+}
